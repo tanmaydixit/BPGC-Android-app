@@ -31,6 +31,7 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -88,6 +89,17 @@ public class MainActivity extends AppCompatActivity {
         app_title.setTypeface(typeface_medium);
 
         actionBar.setCustomView(app_title);
+
+        //Subscribe to topic
+        FirebaseMessaging.getInstance().subscribeToTopic("cutoff")
+                .addOnCompleteListener(task -> {
+                    String msg = "Subscribe to topic successful";
+                    if (!task.isSuccessful()) {
+                        msg = "Subscribe to topic not successful";
+                    }
+                    Log.e(TAG, msg);
+                    Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+                });
 
         //shared preferences for theme
         theme_shared_preferences = Objects.requireNonNull(this).getSharedPreferences("ThemeOptions", MODE_PRIVATE);
